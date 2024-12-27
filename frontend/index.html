@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AvoVision Web</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Imagen de Fondo -->
+        <div class="background-image"></div>
+
+        <!-- Contenido Principal -->
+        <div class="main-content">
+            <div class="image-area">
+                <div id="image-display" class="image-placeholder"></div>
+                <div id="image-display2" class="image-placeholder"></div>
+            </div>
+            
+            <!-- Botones Principales -->
+            <div class="button-group">
+                <form id="uploadForm">Elegir Imagen
+                    <input type="file" id="fileInput" name="file" accept="image/*" required>
+                    <button type="submit">Subir y Analizar</button>
+                </form>
+                <button id="area-button" disabled>Calcular Área Dañada</button>
+                <button id="analysis-button" disabled>Análisis Completo</button>
+                <button id="reset-button" disabled>Reiniciar</button>
+                <button id="maturity-button" disabled>Nivel de Maduración</button>
+            </div>
+            <!-- Caja de los resultados-->
+            <div id="result" class="result" style="display: none;">
+                <h3>Resultado:</h3>
+                <p><strong>Porcentaje de Área Dañada:</strong> <span id="percentage"></span>%</p>
+            </div>
+
+            <!-- Sliders -->
+            <div class="sliders">
+                <label for="h-min">H Min:</label>
+                <input type="range" id="h-min" min="0" max="360" value="18">
+                <label for="h-max">H Max:</label>
+                <input type="range" id="h-max" min="0" max="360" value="23">
+                <label for="s-min">S Min:</label>
+                <input type="range" id="s-min" min="0" max="255" value="0">
+                <label for="s-max">S Max:</label>
+                <input type="range" id="s-max" min="0" max="255" value="255">
+                <label for="v-min">V Min:</label>
+                <input type="range" id="v-min" min="0" max="255" value="0">
+                <label for="v-max">V Max:</label>
+                <input type="range" id="v-max" min="0" max="255" value="255">
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
