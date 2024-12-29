@@ -51,6 +51,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    top: 500px;
 }
 
 /* Button Group */
@@ -73,7 +74,7 @@ button {
 
 button:disabled {
     background-color: #ccc;
-    cursor: not-allowed;
+    /*cursor: not-allowed;*/
 }
 
 /* Sliders */
