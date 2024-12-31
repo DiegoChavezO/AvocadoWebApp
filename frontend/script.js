@@ -1,3 +1,11 @@
+let uploadedImages = [];
+let currentIndex = 0;
+
+// Función para mostrar una imagen en el placeholder
+function displayImage(index) {
+    const imageDisplay = document.getElementById("image-display");
+    imageDisplay.style.backgroundImage = `url(${uploadedImages[index]})`;
+}
 // Evento para subir imágenes
 document.getElementById("uploadForm").addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -19,10 +27,24 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
         const result = await response.json();
         console.log(result);  // Manejo de resultado en la consola
 
-        // Mostrar mensaje de éxito
-        alert(result.message);
+        // Guardar las URLs de las imágenes subidas
+        uploadedImages = result.uploaded_files.map((file) => file.url);
 
-        document.getElementById("analyzeButton").disabled = false;
+        if (uploadedImages.length > 0) {
+            currentIndex = 0;
+            displayImage(currentIndex);
+
+            // Habilitar los botones si hay más de una imagen
+            if (uploadedImages.length > 1) {
+                document.getElementById("prevButton").disabled = false;
+                document.getElementById("nextButton").disabled = false;
+            }
+
+            // Habilitar el botón de analizar
+            document.getElementById("analyzeButton").disabled = false;
+        } else {
+            alert("No se subieron imágenes.");
+        }
 
     } catch (error) {
         alert("Hubo un error al subir las imágenes.");
@@ -61,5 +83,19 @@ document.getElementById("analyzeButton").addEventListener("click", async () => {
     } catch (error) {
         alert("Hubo un error al analizar las imágenes.");
         console.error(error);
+    }
+});
+// Navegación entre imágenes
+document.getElementById("prevButton").addEventListener("click", () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        displayImage(currentIndex);
+    }
+});
+
+document.getElementById("nextButton").addEventListener("click", () => {
+    if (currentIndex < uploadedImages.length - 1) {
+        currentIndex++;
+        displayImage(currentIndex);
     }
 });

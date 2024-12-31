@@ -47,11 +47,15 @@ body {
     width: 300px;
     height: 410px;
     background-color: #F1F0F0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
     border: 1px solid #ccc;
-    display: flex;
+    /*display: flex;*/
     justify-content: center;
     align-items: center;
     top: 500px;
+    border:1px solid #73B731
 }
 
 /* Button Group */
