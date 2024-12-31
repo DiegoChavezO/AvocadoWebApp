@@ -99,3 +99,26 @@ document.getElementById("nextButton").addEventListener("click", () => {
         displayImage(currentIndex);
     }
 });
+
+//deslizadores
+// Actualiza el campo numérico cuando el slider cambia
+function updateSliderValue(inputId, value) {
+    const inputElement = document.getElementById(inputId);
+    inputElement.value = value;
+}
+
+// Actualiza el slider cuando el valor del campo numérico cambia
+function updateInputValue(sliderId, value) {
+    const sliderElement = document.getElementById(sliderId);
+    const parsedValue = parseInt(value, 10);
+
+    // Validar que el valor esté dentro del rango del slider
+    if (parsedValue >= parseInt(sliderElement.min, 10) && parsedValue <= parseInt(sliderElement.max, 10)) {
+        sliderElement.value = parsedValue;
+    } else {
+        alert(`El valor debe estar entre ${sliderElement.min} y ${sliderElement.max}.`);
+    }
+
+    // Sincronizar el valor del slider con el input
+    sliderElement.dispatchEvent(new Event("input"));
+}

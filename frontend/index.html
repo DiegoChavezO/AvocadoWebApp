@@ -39,21 +39,27 @@
                 <h3>Resultado:</h3>
                 <p><strong>Porcentaje de Área Dañada:</strong> <span id="percentage"></span>%</p>
             </div>
-
-            <!-- Sliders -->
             <div class="sliders">
-                <label for="h-min">H Min:</label>
-                <input type="range" id="h-min" min="0" max="360" value="18">
-                <label for="h-max">H Max:</label>
-                <input type="range" id="h-max" min="0" max="360" value="23">
-                <label for="s-min">S Min:</label>
-                <input type="range" id="s-min" min="0" max="255" value="0">
-                <label for="s-max">S Max:</label>
-                <input type="range" id="s-max" min="0" max="255" value="255">
-                <label for="v-min">V Min:</label>
-                <input type="range" id="v-min" min="0" max="255" value="0">
-                <label for="v-max">V Max:</label>
-                <input type="range" id="v-max" min="0" max="255" value="255">
+                <label for="h-min">H Min: <input type="number" id="h-min-input" min="0" max="360" value="18" onchange="updateInputValue('h-min', this.value)"></label>
+                <input type="range" id="h-min" min="0" max="360" value="18" oninput="updateSliderValue('h-min-input', this.value)">
+                
+            
+                <label for="h-max">H Max: <input type="number" id="h-max-input" min="0" max="360" value="23" onchange="updateInputValue('h-max', this.value)"></label>
+                <input type="range" id="h-max" min="0" max="360" value="23" oninput="updateSliderValue('h-max-input', this.value)">
+                
+            
+                <label for="s-min">S Min: <input type="number" id="s-min-input" min="0" max="255" value="0" onchange="updateInputValue('s-min', this.value)"></label>
+                <input type="range" id="s-min" min="0" max="255" value="0" oninput="updateSliderValue('s-min-input', this.value)">
+                
+                <label for="s-max">S Max: <input type="number" id="s-max-input" min="0" max="255" value="255" onchange="updateInputValue('s-max', this.value)"></label>
+                <input type="range" id="s-max" min="0" max="255" value="255" oninput="updateSliderValue('s-max-input', this.value)">
+            
+                <label for="v-min">V Min: <input type="number" id="v-min-input" min="0" max="255" value="0" onchange="updateInputValue('v-min', this.value)"></label>
+                <input type="range" id="v-min" min="0" max="255" value="0" oninput="updateSliderValue('v-min-input', this.value)">
+            
+                <label for="v-max">V Max:<input type="number" id="v-max-input" min="0" max="255" value="255" onchange="updateInputValue('v-max', this.value)"></label>
+                <input type="range" id="v-max" min="0" max="255" value="255" oninput="updateSliderValue('v-max-input', this.value)">
+                
             </div>
         </div>
     </div>
