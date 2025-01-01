@@ -1,16 +1,21 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 import cv2
 import numpy as np
 from rembg import remove
 import sys
 import os
-UPLOAD_FOLDER = "uploads"
+from pathlib import Path
+
 #sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 router = APIRouter()
+# Directorio para guardar imágenes procesadas
+PROCESSED_FOLDER = "processed"
+os.makedirs(PROCESSED_FOLDER, exist_ok=True)
+UPLOAD_FOLDER = "uploads"
 
 @router.post("/analyze/")
-def analyze_images():
+async def analyze_images(request:Request):
     """
     Procesar el área dañada para las imágenes subidas.
     
@@ -26,12 +31,13 @@ def analyze_images():
     if not image_files:
         return JSONResponse(status_code=400, content={"error": "No hay imágenes para analizar en 'uploads'."})
 
+     # Leer valores de los sliders del frontend
+    body = await request.json() ####
+    rango_min = np.array([body["h_min"], body["s_min"], body["v_min"]], np.uint8) ####
+    rango_max = np.array([body["h_max"], body["s_max"], body["v_max"]], np.uint8)####
     
     results = []
-    for image_file in image_files: #uploaded_images
-        #filepath = image_info["filepath"]
-        #filename = image_info["filename"]
-
+    for image_file in image_files: #uploaded_images     
         try:
             image_path = os.path.join(UPLOAD_FOLDER, image_file)
             # Leer la imagen
@@ -53,20 +59,33 @@ def analyze_images():
 
             # Detectar área dañada (HSV)
             hsv_img = cv2.cvtColor(img_gaussian, cv2.COLOR_RGB2HSV)
-            lower_bound = np.array([18, 0, 0])  # Valores mínimos de HSV
-            upper_bound = np.array([23, 255, 255])  # Valores máximos de HSV
-            mask_damage = cv2.inRange(hsv_img, lower_bound, upper_bound)
-
+            #lower_bound = np.array([18, 0, 0])  # Valores mínimos de HSV
+            #upper_bound = np.array([23, 255, 255])  # Valores máximos de HSV
+            ###mask_damage = cv2.inRange(hsv_img, lower_bound, upper_bound)
+            mask_damage = cv2.inRange(hsv_img, rango_min, rango_max) ####
             # Calcular píxeles dañados
             pixels_damaged = np.sum(mask_damage == 255)
 
             # Calcular porcentaje de área dañada
             damage_percentage = (pixels_damaged / pixels_total) * 100 if pixels_total > 0 else 0
 
+            ################################################################
+            # Crear imagen segmentada con fondo conservado y área dañada marcada
+            mask_damage_3ch = cv2.cvtColor(mask_damage, cv2.COLOR_GRAY2RGB)  # Convertir la máscara de daño a 3 canales
+            segmentada_con_fondo = cv2.bitwise_and(img, img, mask=mask_damage)  # Aplicar máscara de daño sobre la imagen original
+
+            # Superponer la máscara sobre la imagen original para conservar el fondo y resaltar el daño
+            segmentada_con_fondo = cv2.addWeighted(img, 0.7, mask_damage_3ch, 0.3, 0)  # Mezcla con transparencia
+             # Guardar imagen segmentada
+            processed_image_path = os.path.join(PROCESSED_FOLDER, f"processed_{image_file}")
+            cv2.imwrite(processed_image_path, cv2.cvtColor(segmentada_con_fondo, cv2.COLOR_RGB2BGR))
+
+
             # Agregar resultado
             results.append({
                 "filename": image_file,
                 "damage_percentage": round(damage_percentage, 2),
+                "processed_image_url": f"/{PROCESSED_FOLDER}/{Path(processed_image_path).name}" ###
             })
         except Exception as e:
             results.append({"filename": image_file, "error": str(e)})
