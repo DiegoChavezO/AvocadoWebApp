@@ -26,6 +26,7 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
 
         const result = await response.json();
         console.log(result);  // Manejo de resultado en la consola
+        alert(result.message);
 
         // Guardar las URLs de las imágenes subidas
         uploadedImages = result.uploaded_files.map((file) => file.url);
