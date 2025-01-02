@@ -64,8 +64,13 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
                 document.getElementById("nextButton").disabled = false;
             }
 
-            // Habilitar el botón de analizar
+            // Habilitar el botón de analizar y los demas
             document.getElementById("analyzeButton").disabled = false;
+            document.getElementById("histograma").disabled = false;
+            document.getElementById("reset-button").disabled = false;
+            document.getElementById("maturity-button").disabled = false;
+            document.getElementById("analysis-button").disabled = false
+            document.getElementById("modelButton").disabled = false
         } else {
             alert("No se subieron imágenes.");
         }
@@ -187,3 +192,50 @@ function updateInputValue(sliderId, value) {
     // Sincronizar el valor del slider con el input
     sliderElement.dispatchEvent(new Event("input"));
 }
+
+/*
+document.getElementById("comboBox-histogramas").addEventListener("change", () => {
+    document.getElementById("histograma").disabled = false;
+});
+*/
+// Función para mostrar la imagen generada
+function showHistogramPopup(histogramUrl) {
+    const popupWindow = window.open("", "_blank", "width=800,height=600");
+    popupWindow.document.write(`
+        <html>
+        <head>
+            <title>Histograma</title>
+        </head>
+        <body>
+            <img src="${histogramUrl}" alt="Histograma" style="width:100%; height:auto;">
+            <br>
+            <a href="${histogramUrl}" download>Descargar Histograma</a>
+        </body>
+        </html>
+    `);
+    popupWindow.document.close();
+}
+
+// Manejo del botón para generar histogramas
+document.getElementById("histograma").addEventListener("click", async () => {
+    const mode = document.getElementById("comboBox-histogramas").value.toLowerCase();
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/histograms/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ mode }),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            // Mostrar cada histograma en el pop-up
+            result.histograms.forEach((histogramUrl) => {
+                showHistogramPopup(`http://127.0.0.1:8000/${histogramUrl}`);
+            });
+        } else {
+            alert("Error al generar histogramas: " + result.detail);
+        }
+    } catch (error) {
+        console.error("Error al generar histogramas:", error);
+    }
+});

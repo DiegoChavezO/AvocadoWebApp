@@ -53,9 +53,9 @@
                     </div>
                     <span>Generar histograma</span>
                     <select id="comboBox-histogramas">
-                        <option value="opcion1">RGB</option>
-                        <option value="opcion2">HSV</option>
-                        <option value="opcion2">lab</option>
+                        <option value="rgb">RGB</option>
+                        <option value="hsv">HSV</option>
+                        <option value="lab">LAB</option>
                     </select>
                     <button id="histograma" disabled>histograma</button>
                     <button id="analysis-button" disabled>Análisis Completo</button>
@@ -73,7 +73,9 @@
                         <input type="file" id="fileInput" name="file" accept="image/*" multiple required>
                         <button type="submit">Subir</button>
                     </form>
-                    <button id = "manual"> Manual </button>
+                    <button id = "manual"> <!-- Botón para descargar el recurso -->
+                        <a href="http://127.0.0.1:8000/static/manual.pdf" download="Manual_AvoVision.pdf">Manual</a>
+                    </button>
                 </div>
                 
                 <!-- area de visualizacion del area dañada y la imagen subida  -->
