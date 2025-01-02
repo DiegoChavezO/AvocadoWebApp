@@ -11,6 +11,7 @@ from fastapi import FastAPI
 from routes.upload import router as upload_router
 from routes.analyze import router as analyze_router
 from routes.histograms import router as histograms_router
+from routes.reset import router as reset_router
 
 from fastapi.middleware.cors import CORSMiddleware
 # Crear la aplicación FastAPI
@@ -30,6 +31,7 @@ app.add_middleware(
 app.include_router(upload_router, prefix="/api", tags=["Upload"])
 app.include_router(analyze_router, prefix="/api", tags=["Analyze"])
 app.include_router(histograms_router, prefix="/api")
+app.include_router(reset_router, prefix="/api", tags=["Reset"])
 
 # Configuración para servir archivos estáticos
 app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")

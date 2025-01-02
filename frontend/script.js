@@ -199,7 +199,7 @@ document.getElementById("comboBox-histogramas").addEventListener("change", () =>
 });
 */
 // Función para mostrar la imagen generada
-function showHistogramPopup(histogramUrl) {
+function showHistogramPopup(histogramUrl,imageTitle) {
     const popupWindow = window.open("", "_blank", "width=800,height=600");
     popupWindow.document.write(`
         <html>
@@ -207,6 +207,8 @@ function showHistogramPopup(histogramUrl) {
             <title>Histograma</title>
         </head>
         <body>
+            <h2>Titulo: ${imageTitle}</h2>
+            <br>
             <img src="${histogramUrl}" alt="Histograma" style="width:100%; height:auto;">
             <br>
             <a href="${histogramUrl}" download>Descargar Histograma</a>
@@ -230,7 +232,8 @@ document.getElementById("histograma").addEventListener("click", async () => {
         if (response.ok) {
             // Mostrar cada histograma en el pop-up
             result.histograms.forEach((histogramUrl) => {
-                showHistogramPopup(`http://127.0.0.1:8000/${histogramUrl}`);
+                const imageTitle = histogramUrl.split("/").pop(); // Extrae el nombre del archivo
+                showHistogramPopup(`http://127.0.0.1:8000/${histogramUrl}`,imageTitle);
             });
         } else {
             alert("Error al generar histogramas: " + result.detail);
@@ -239,3 +242,84 @@ document.getElementById("histograma").addEventListener("click", async () => {
         console.error("Error al generar histogramas:", error);
     }
 });
+
+document.getElementById("reset-button").addEventListener("click", async () => {
+    if (!confirm("¿Estás seguro de que deseas reiniciar? Se eliminarán todas las imágenes subidas y generadas.")) {
+        return;
+    }
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/reset/", {
+            method: "POST",
+        });
+
+        const result = await response.json();
+        console.log(result.message);
+
+        // Limpiar los resultados en el frontend
+        const resultContainer = document.getElementById("result");
+        if (resultContainer) {
+            resultContainer.innerHTML = ""; // Limpia el contenido del área de resultados
+        }
+
+        // Restablecer los placeholders de las imágenes
+        const placeholders = document.querySelectorAll(".image-placeholder");
+        placeholders.forEach((placeholder) => {
+            if (placeholder) {
+                placeholder.style.backgroundImage = "none"; // Quitar la imagen
+            }
+        });
+
+        // Desactivar botones nuevamente
+        document.getElementById("analyzeButton").disabled = true;
+        document.getElementById("histograma").disabled = true;
+        document.getElementById("prevButton").disabled = true;
+        document.getElementById("nextButton").disabled = true;
+        document.getElementById("prevButton2").disabled = true;
+        document.getElementById("nextButton2").disabled = true;
+
+        document.getElementById("reset-button").disabled = false;
+        document.getElementById("maturity-button").disabled = true;
+        document.getElementById("analysis-button").disabled = true;
+        document.getElementById("modelButton").disabled = true;
+
+
+        alert("Aplicación reiniciada con éxito.");
+    } catch (error) {
+        console.error("Error al reiniciar:", error);
+        alert("Hubo un error al intentar reiniciar la aplicación.");
+    }
+});
+/*
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/reset/", {
+            method: "POST",
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+            alert(result.message);
+
+            // Reiniciar la interfaz
+            document.getElementById("image-display").style.backgroundImage = "none";
+            document.getElementById("image-display2").style.backgroundImage = "none";
+            document.getElementById("analyzeButton").disabled = true;
+            document.getElementById("histograma").disabled = true;
+            document.getElementById("reset-button").disabled = false;
+
+            // Opcional: Limpiar otros elementos
+            document.getElementById("result").style.display = "none";
+            document.getElementById("result").innerHTML = "";
+
+            // Reiniciar sliders
+            document.querySelectorAll(".sliders input").forEach((slider) => {
+                slider.value = slider.getAttribute("value");
+                document.getElementById(`${slider.id}-value`).innerText = slider.value;
+            });
+        } else {
+            alert("Error al reiniciar: " + result.error);
+        }
+    } catch (error) {
+        console.error("Error al reiniciar:", error);
+        alert("Hubo un error al reiniciar la aplicación.");
+    }
+});*/
