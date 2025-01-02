@@ -7,38 +7,50 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <!-- Imagen de Fondo -->
-        <div class="background-image"></div>
-
-        <!-- Contenido Principal -->
+    <!--contenedor orignial donde defino el ancho del área visible-->
+    <div class="container"> 
+        <!-- Contenido Principal para dar la funcion flex -->
         <div class="main-content">
-            <div class="image-area">
-                <div id="image-display" class="image-placeholder"></div>
-                <div id="image-display2" class="image-placeholder"></div>
-            </div>
-            <div class="placeholder-buttons">
-                <button id="prevButton" disabled>Anterior</button>
-                <button id="nextButton" disabled>Siguiente</button>
-                <button id="prevButton2" disabled>Anetrior</button>
-                <button id="nextButton2" disabled>Siguiente</button>
-            </div>
-            <!-- Botones Principales -->
-            <div class="button-group">
+            <!--contenedor para el icono superior-->
+            <div class="icono">
+                <img src="icon.png" alt="icono chido de la app">
+            </div>  
+            <!-- Botones para manual y para subir una imágen -->
+            <div class="upper-buttons">
                 <form id="uploadForm">Elegir Imagen
                     <input type="file" id="fileInput" name="file" accept="image/*" multiple required>
                     <button type="submit">Subir</button>
                 </form>
+                <button id = "manual"> Manual </button>
+            </div>
+            <!-- Botones Principales -->
+            <div class="button-group">
                 <button id="analyzeButton" disabled>Calcular Área Dañada</button>
                 <button id="analysis-button" disabled>Análisis Completo</button>
                 <button id="reset-button" disabled>Reiniciar</button>
                 <button id="maturity-button" disabled>Nivel de Maduración</button>
             </div>
+            <!-- area de visualizacion del area dañada y la imagen subida  -->
+            <div class="area-images-display">    
+                <div class="image-area">
+                    <div id="image-display" class="image-placeholder"></div>
+                    <div id="image-display2" class="image-placeholder"></div>
+                </div>
+                <div class="placeholder-buttons">
+                    <button id="prevButton" disabled>Anterior</button>
+                    <button id="nextButton" disabled>Siguiente</button>
+                    <button id="prevButton2" disabled>Anetrior</button>
+                    <button id="nextButton2" disabled>Siguiente</button>
+                </div>
+            </div>
+            
+            
             <!-- Caja de los resultados-->
             <div id="result" class="result" style="display: none;">
                 <h3>Resultado:</h3>
                 <p><strong>Porcentaje de Área Dañada:</strong> <span id="percentage"></span>%</p>
             </div>
+            <!-- SLIDERS-->
             <div class="sliders">
                 <label for="h-min">H Min: <input type="number" id="h-min-input" min="0" max="360" value="18" onchange="updateInputValue('h-min', this.value)"></label>
                 <input type="range" id="h-min" min="0" max="360" value="18" oninput="updateSliderValue('h-min-input', this.value)">
