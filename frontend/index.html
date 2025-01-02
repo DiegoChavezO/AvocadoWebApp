@@ -17,36 +17,52 @@
                 <div class="icono">
                     <img src="icon.png" alt="icono chido de la app">
                 </div>
+                
                 <!-- Botones Principales -->
                 <div class="button-group">
+                    <span class="titulos">Herramientas</span>
+                    <select id="comboBox">
+                        <option value="opcion1">VGG 16</option>
+                        <option value="opcion2">MOBILENETv2</option>
+                    </select>
+                    <button id="modelButton" disabled>Clasificar enfermedad</button>
                     <button id="analyzeButton" disabled>Calcular Área Dañada</button>
+                    <span>modificación de valores HSV para el porcentaje de área dañada</span>
+                    <!-- SLIDERS-->
+                    <div class="sliders">
+                        <label for="h-min">H Min: <input type="number" id="h-min-input" min="0" max="360" value="18" onchange="updateInputValue('h-min', this.value)"></label>
+                        <input type="range" id="h-min" min="0" max="360" value="18" oninput="updateSliderValue('h-min-input', this.value)">
+                        
+                    
+                        <label for="h-max">H Max: <input type="number" id="h-max-input" min="0" max="360" value="23" onchange="updateInputValue('h-max', this.value)"></label>
+                        <input type="range" id="h-max" min="0" max="360" value="23" oninput="updateSliderValue('h-max-input', this.value)">
+                        
+                    
+                        <label for="s-min">S Min: <input type="number" id="s-min-input" min="0" max="255" value="0" onchange="updateInputValue('s-min', this.value)"></label>
+                        <input type="range" id="s-min" min="0" max="255" value="0" oninput="updateSliderValue('s-min-input', this.value)">
+                        
+                        <label for="s-max">S Max: <input type="number" id="s-max-input" min="0" max="255" value="255" onchange="updateInputValue('s-max', this.value)"></label>
+                        <input type="range" id="s-max" min="0" max="255" value="255" oninput="updateSliderValue('s-max-input', this.value)">
+                    
+                        <label for="v-min">V Min: <input type="number" id="v-min-input" min="0" max="255" value="0" onchange="updateInputValue('v-min', this.value)"></label>
+                        <input type="range" id="v-min" min="0" max="255" value="0" oninput="updateSliderValue('v-min-input', this.value)">
+                    
+                        <label for="v-max">V Max:<input type="number" id="v-max-input" min="0" max="255" value="255" onchange="updateInputValue('v-max', this.value)"></label>
+                        <input type="range" id="v-max" min="0" max="255" value="255" oninput="updateSliderValue('v-max-input', this.value)">
+                        
+                    </div>
+                    <span>Generar histograma</span>
+                    <select id="comboBox-histogramas">
+                        <option value="opcion1">RGB</option>
+                        <option value="opcion2">HSV</option>
+                        <option value="opcion2">lab</option>
+                    </select>
+                    <button id="histograma" disabled>histograma</button>
                     <button id="analysis-button" disabled>Análisis Completo</button>
-                    <button id="reset-button" disabled>Reiniciar</button>
                     <button id="maturity-button" disabled>Nivel de Maduración</button>
+                    <button id="reset-button" disabled>Reiniciar</button>
                 </div>
-                <!-- SLIDERS-->
-                <div class="sliders">
-                    <label for="h-min">H Min: <input type="number" id="h-min-input" min="0" max="360" value="18" onchange="updateInputValue('h-min', this.value)"></label>
-                    <input type="range" id="h-min" min="0" max="360" value="18" oninput="updateSliderValue('h-min-input', this.value)">
-                    
                 
-                    <label for="h-max">H Max: <input type="number" id="h-max-input" min="0" max="360" value="23" onchange="updateInputValue('h-max', this.value)"></label>
-                    <input type="range" id="h-max" min="0" max="360" value="23" oninput="updateSliderValue('h-max-input', this.value)">
-                    
-                
-                    <label for="s-min">S Min: <input type="number" id="s-min-input" min="0" max="255" value="0" onchange="updateInputValue('s-min', this.value)"></label>
-                    <input type="range" id="s-min" min="0" max="255" value="0" oninput="updateSliderValue('s-min-input', this.value)">
-                    
-                    <label for="s-max">S Max: <input type="number" id="s-max-input" min="0" max="255" value="255" onchange="updateInputValue('s-max', this.value)"></label>
-                    <input type="range" id="s-max" min="0" max="255" value="255" oninput="updateSliderValue('s-max-input', this.value)">
-                
-                    <label for="v-min">V Min: <input type="number" id="v-min-input" min="0" max="255" value="0" onchange="updateInputValue('v-min', this.value)"></label>
-                    <input type="range" id="v-min" min="0" max="255" value="0" oninput="updateSliderValue('v-min-input', this.value)">
-                
-                    <label for="v-max">V Max:<input type="number" id="v-max-input" min="0" max="255" value="255" onchange="updateInputValue('v-max', this.value)"></label>
-                    <input type="range" id="v-max" min="0" max="255" value="255" oninput="updateSliderValue('v-max-input', this.value)">
-                    
-                </div>
             </div>  
 
             <!-- cuadro derecho -->
@@ -76,8 +92,9 @@
                 
                 
                 <!-- Caja de los resultados-->
+                 
+                <span class="text-results">Resultados: </span>
                 <div class="box-result">
-                    <span>Resultado: </span>
                     <div id="result" class="result" style="display: none;">
                         <h3>Resultado:</h3>
                         <p><strong>Porcentaje de Área Dañada:</strong> <span id="percentage"></span>%</p>
