@@ -323,3 +323,93 @@ document.getElementById("reset-button").addEventListener("click", async () => {
         alert("Hubo un error al reiniciar la aplicación.");
     }
 });*/
+// Evento para clasificar imágenes
+document.getElementById("modelButton").addEventListener("click", async () => {
+    const comboBox = document.getElementById("comboBox");
+    const selectedModel = comboBox.value === "opcion1" ? "VGG16" : "MobileNetV2";
+
+    try {
+        const response = await fetch(`http://127.0.0.1:8000/api/classify/?model_type=${selectedModel}`, {
+            method: "POST",
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        // Mostrar resultados en el área de resultados
+        const resultContainer = document.getElementById("result");
+        resultContainer.innerHTML = ""; // Limpiar resultados previos
+
+        if (result.error) {
+            resultContainer.innerHTML = `<p>Error: ${result.error}</p>`;
+        } else {
+            result.results.forEach((res) => {
+                const div = document.createElement("div");
+                div.innerHTML = `Imagen: <strong>${res.filename}</strong>, Clase: <strong>${res.class}</strong>, Probabilidad: <strong>${res.probability}%</strong>`;
+                resultContainer.appendChild(div);
+            });
+        }
+
+        document.getElementById("result").style.display = "block";
+    } catch (error) {
+        console.error("Error al clasificar imágenes:", error);
+    }
+});
+
+
+document.getElementById("maturity-button").addEventListener("click", async () => {
+    
+    //const response = "http://127.0.0.1:8000/api/maturity/"
+    const response = await fetch(`http://127.0.0.1:8000/api/maturity/`, {
+        method: "post",
+    })
+    try {
+        const result = await response.json();
+        console.log(result);
+
+        // Mostrar resultados en el área de resultados
+        const resultContainer = document.getElementById("result");
+        resultContainer.innerHTML = ""; // Limpiar resultados previos
+
+        if (result.error) {
+            resultContainer.innerHTML = `<p>Error: ${result.error}</p>`;
+        } else {
+            result.results.forEach((res) => {
+                const div = document.createElement("div");
+                div.innerHTML = `Imagen: <strong>${res.filename}</strong>, Clase: <strong>${res.class}</strong>, Probabilidad: <strong>${res.probability}%</strong>`;
+                resultContainer.appendChild(div);
+            });
+        }
+
+        document.getElementById("result").style.display = "block";
+    } catch (error) {
+        console.error("Error al clasificar imágenes:", error);
+    }
+});
+
+// Botón para análisis completo
+document.getElementById("analysis-button").addEventListener("click", async () => {
+    try {
+        const response = await fetch("http://127.0.0.1:8000/api/analysis/", {
+            method: "POST",
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al generar el análisis completo");
+        }
+
+        // Descargar el PDF generado
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.style.display = "none";
+        a.href = url;
+        a.download = "analysis_report.pdf";
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+    } catch (error) {
+        console.error("Error al generar el análisis completo:", error);
+        alert("Hubo un error al generar el análisis completo.");
+    }
+});
