@@ -5,7 +5,7 @@ import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 import matplotlib
-matplotlib.use('Agg')
+matplotlib.use("Agg")
 #aqui comienza el codigo jeje
 from fastapi import FastAPI
 from routes.upload import router as upload_router
@@ -44,8 +44,16 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 app.mount("/processed", StaticFiles(directory="processed"), name="processed")
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/histograms", StaticFiles(directory="histograms"), name="histograms")
-app.mount("/models", StaticFiles(directory="backend/models"), name="models")
+app.mount("/models", StaticFiles(directory="models"), name="models")
 # Ruta principal para verificar el estado de la API
 @app.get("/")
 def root():
     return {"message": "API funcionando correctamente"}
+
+# Punto de entrada para ejecutar la aplicación
+if __name__ == "__main__":
+    import uvicorn
+
+    # Usar el puerto definido en la variable de entorno PORT o 5500 por defecto
+    port = int(os.getenv("PORT", 8080))
+    uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
