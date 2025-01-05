@@ -4,6 +4,12 @@ let currentIndex = 0;
 let processedImages = []; // Lista de URLs de imágenes procesadas
 let currentProcessedIndex = 0; // Índice actual de la imagen procesada
 
+//colocar 1 para el local, 2 para el final
+const BACKEND_URL = "https://aplicacion-backend-v2-565329448277.us-central1.run.app"//"https://b8edfad75318-565329448277.us-central1.run.app"; //http://127.0.0.1:8080
+const dec = 0
+
+//dec = 0 ? BACKEND_URL="http://127.0.0.1:8000" : BACKEND_URL="https://<tu-backend-url>.run.app";
+
 // Función para mostrar una imagen en el placeholder
 function displayImage(index) {
     const imageDisplay = document.getElementById("image-display");
@@ -42,7 +48,7 @@ document.getElementById("uploadForm").addEventListener("submit", async (e) => {
     }
 
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/upload/", {
+        const response = await fetch(`https://aplicacion-backend-v2-565329448277.us-central1.run.app/api/upload/`, { //fetch("http://127.0.0.1:8000/api/upload/"
             method: "POST",
             body: formData,
         });
@@ -92,7 +98,7 @@ document.getElementById("analyzeButton").addEventListener("click", async () => {
     const vMax = document.getElementById("v-max").value;
     ////
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/analyze/", {
+        const response = await fetch(`${BACKEND_URL}/api/analyze/`, { //MODIFICADO "http://127.0.0.1:8000/api/analyze/"
             method: "POST",
            /////////
             eaders: { "Content-Type": "application/json" },
@@ -124,7 +130,7 @@ document.getElementById("analyzeButton").addEventListener("click", async () => {
                 div.innerText = `Error con la imagen ${image.filename}: ${image.error}`;
             } else {
                 div.innerText = `Imagen: ${image.filename}, Área dañada: ${image.damage_percentage}%`;
-                processedImages.push(`http://127.0.0.1:8000${image.processed_image_url}`);
+                processedImages.push(`${BACKEND_URL}${image.processed_image_url}`); //`http://127.0.0.1:8000${image.processed_image_url}`
             }
 
             resultContainer.appendChild(div);
@@ -222,7 +228,7 @@ function showHistogramPopup(histogramUrl,imageTitle) {
 document.getElementById("histograma").addEventListener("click", async () => {
     const mode = document.getElementById("comboBox-histogramas").value.toLowerCase();
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/histograms/", {
+        const response = await fetch(`${BACKEND_URL}/api/histograms/`, { //"http://127.0.0.1:8000/api/histograms/" CHECKAR EH 
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ mode }),
@@ -233,7 +239,7 @@ document.getElementById("histograma").addEventListener("click", async () => {
             // Mostrar cada histograma en el pop-up
             result.histograms.forEach((histogramUrl) => {
                 const imageTitle = histogramUrl.split("/").pop(); // Extrae el nombre del archivo
-                showHistogramPopup(`http://127.0.0.1:8000/${histogramUrl}`,imageTitle);
+                showHistogramPopup(`${BACKEND_URL}/${histogramUrl}`,imageTitle); //(`http://127.0.0.1:8000/${histogramUrl}
             });
         } else {
             alert("Error al generar histogramas: " + result.detail);
@@ -248,7 +254,7 @@ document.getElementById("reset-button").addEventListener("click", async () => {
         return;
     }
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/reset/", {
+        const response = await fetch(`${BACKEND_URL}/api/reset/`, { //fetch("http://127.0.0.1:8000/api/reset/",
             method: "POST",
         });
 
@@ -289,47 +295,15 @@ document.getElementById("reset-button").addEventListener("click", async () => {
         alert("Hubo un error al intentar reiniciar la aplicación.");
     }
 });
-/*
-    try {
-        const response = await fetch("http://127.0.0.1:8000/api/reset/", {
-            method: "POST",
-        });
 
-        const result = await response.json();
-        if (response.ok) {
-            alert(result.message);
 
-            // Reiniciar la interfaz
-            document.getElementById("image-display").style.backgroundImage = "none";
-            document.getElementById("image-display2").style.backgroundImage = "none";
-            document.getElementById("analyzeButton").disabled = true;
-            document.getElementById("histograma").disabled = true;
-            document.getElementById("reset-button").disabled = false;
-
-            // Opcional: Limpiar otros elementos
-            document.getElementById("result").style.display = "none";
-            document.getElementById("result").innerHTML = "";
-
-            // Reiniciar sliders
-            document.querySelectorAll(".sliders input").forEach((slider) => {
-                slider.value = slider.getAttribute("value");
-                document.getElementById(`${slider.id}-value`).innerText = slider.value;
-            });
-        } else {
-            alert("Error al reiniciar: " + result.error);
-        }
-    } catch (error) {
-        console.error("Error al reiniciar:", error);
-        alert("Hubo un error al reiniciar la aplicación.");
-    }
-});*/
 // Evento para clasificar imágenes
 document.getElementById("modelButton").addEventListener("click", async () => {
     const comboBox = document.getElementById("comboBox");
     const selectedModel = comboBox.value === "opcion1" ? "VGG16" : "MobileNetV2";
 
     try {
-        const response = await fetch(`http://127.0.0.1:8000/api/classify/?model_type=${selectedModel}`, {
+        const response = await fetch(`${BACKEND_URL}/api/classify/?model_type=${selectedModel}`, { //`http://127.0.0.1:8000/api/classify/?model_type=${selectedModel}`,
             method: "POST",
         });
 
@@ -360,7 +334,7 @@ document.getElementById("modelButton").addEventListener("click", async () => {
 document.getElementById("maturity-button").addEventListener("click", async () => {
     
     //const response = "http://127.0.0.1:8000/api/maturity/"
-    const response = await fetch(`http://127.0.0.1:8000/api/maturity/`, {
+    const response = await fetch(`${BACKEND_URL}/api/maturity/`, { // http://127.0.0.1:8000/api/maturity/
         method: "post",
     })
     try {
@@ -390,7 +364,7 @@ document.getElementById("maturity-button").addEventListener("click", async () =>
 // Botón para análisis completo
 document.getElementById("analysis-button").addEventListener("click", async () => {
     try {
-        const response = await fetch("http://127.0.0.1:8000/api/analysis/", {
+        const response = await fetch(`${BACKEND_URL}/api/analysis/`, { // fetch("http://127.0.0.1:8000/api/analysis/"
             method: "POST",
         });
 

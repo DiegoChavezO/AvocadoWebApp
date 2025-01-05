@@ -26,13 +26,15 @@ def save_histogram(image, mode, filename):
         for i, color in enumerate(colors):
             plt.hist(image[:, :, i].ravel(), bins=256, color=color, alpha=0.5, label=color)
     elif mode == "hsv":
-        colors = ("h", "s", "v")
+        colors = ("purple", "orange", "blue")
+        labels = ["Hue", "Saturation", "Value"]
         for i, color in enumerate(colors):
-            plt.hist(image[:, :, i].ravel(), bins=256, color=color, alpha=0.5, label=color)
+            plt.hist(image[:, :, i].ravel(), bins=256, color=color, alpha=0.5, label=labels[i])
     elif mode == "lab":
-        colors = ("l", "a", "b")
+        labels = ["Lightness", "A (Red-Green)", "B (Blue-Yellow)"]
+        colors = ("gray", "red", "yellow")
         for i, color in enumerate(colors):
-            plt.hist(image[:, :, i].ravel(), bins=256, color=color, alpha=0.5, label=color)
+            plt.hist(image[:, :, i].ravel(), bins=256, color=color, alpha=0.5, label=labels[i])
 
     plt.legend()
     plt.title(f"Histogram for {mode.upper()}")
